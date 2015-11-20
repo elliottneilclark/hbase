@@ -15,8 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "core/connection.h"
 
-#include "core/put.h"
-
-Put::~Put() {
-}
+void Connection::set_zk_quorum(char *zk_q) { this->zk_quorum = zk_q; }

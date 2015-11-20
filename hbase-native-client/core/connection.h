@@ -14,28 +14,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
+#ifndef CORE_CONNECTION_H_
+#define CORE_CONNECTION_H_
 
-#include "core/hbase_connection_attr.h"
+class Connection {
+  char *zk_quorum;
 
-#include "core/hbase_macros.h"
-#include "core/hbase_types.h"
-#include "core/connection_attr.h"
-
-extern "C" {
-int32_t hb_connection_attr_create(hb_connection_attr_t * attr_ptr) {
-  (*attr_ptr) = new ConnectionAttr();
-  return (attr_ptr == NULL)?-1:0;
-}
-
-int32_t hb_connection_attr_set_zk_quorum(hb_connection_t connection,
-    char * zk_quorum) {
-  return 0;
-}
-
-int32_t hb_connection_attr_set_zk_root(hb_connection_t connection,
-    char * zk_root) {
-  return 0;
-}
-}
+public:
+  void set_zk_quorum(char *zk_q);
+};
+#endif // CORE_CONNECTION_H_

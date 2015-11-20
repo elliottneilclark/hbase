@@ -17,13 +17,22 @@
  *
  */
 
-#ifndef CORE_PUT_H_
-#define CORE_PUT_H_
+#include "core/client.h"
 
-#include "core/mutation.h"
+#include <folly/Logging.h>
+#include <folly/Random.h>
+#include <glog/logging.h>
+#include <gflags/gflags.h>
 
-class Put: public Mutation {
- public:
-  ~Put();
-};
-#endif  // CORE_PUT_H_
+using namespace folly;
+
+int main(int argc, char* argv[]) {
+  google::ParseCommandLineFlags(&argc, &argv, true);
+  google::InitGoogleLogging(argv[0]);
+
+  FB_LOG_EVERY_MS(INFO, 10000) << "Hello";
+  for (long i = 0; i < 10000000; i++) {
+    FB_LOG_EVERY_MS(INFO, 1) << Random::rand32();
+  }
+  return 0;
+}

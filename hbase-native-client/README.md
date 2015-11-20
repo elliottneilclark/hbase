@@ -19,11 +19,10 @@ under the License.
 
 # hbase-native-client
 
-Native client for HBase 0.96
+Native client for HBase
 
 This is a C  library that implements a
-HBase client.  It's thread safe and libEv
-based.
+HBase client.
 
 
 ## Design Philosphy

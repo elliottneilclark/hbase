@@ -19,24 +19,23 @@
 
 #include "core/mutation.h"
 
-void Mutation::set_namespace(char * name_space, size_t name_space_length) {
+void Mutation::set_namespace(char *name_space, size_t name_space_length) {
   this->name_space = name_space;
   this->name_space_length = name_space_length;
 }
 
-void Mutation::set_table(char * table, size_t table_length) {
+void Mutation::set_table(char *table, size_t table_length) {
   this->table = table;
   this->table_length = table_length;
 }
 
-void Mutation::set_row(unsigned char * row, size_t row_length) {
+void Mutation::set_row(unsigned char *row, size_t row_length) {
   this->row = row;
   this->row_length = row_length;
 }
 
-void Mutation::set_durability(hb_durability_type durability) {
+void Mutation::set_durability(durability_type durability) {
   this->durability = durability;
 }
 
-Mutation::~Mutation() {
-}
+Mutation::~Mutation() {}

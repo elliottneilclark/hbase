@@ -17,9 +17,9 @@
  *
  */
 
-#ifndef CORE_CLIENT_H_
-#define CORE_CLIENT_H_
+#ifndef CORE_GET_H_
+#define CORE_GET_H_
 
-class Client {
-};
-#endif  // CORE_CLIENT_H_
+class Get {};
+
+#endif // CORE_GET_H_

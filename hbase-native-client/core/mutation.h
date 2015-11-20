@@ -17,43 +17,17 @@
  *
  */
 
-#ifndef CORE_HBASE_TYPES_H_
-#define CORE_HBASE_TYPES_H_
+#ifndef CORE_MUTATION_H_
+#define CORE_MUTATION_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include <stdint.h>
-#include <stddef.h>
-
-typedef unsigned char hb_byte_t;
-
-/*
- * Base kv type.
- */
-typedef struct {
-  hb_byte_t* row;
-  size_t row_length;
-
-  char * family;
-  size_t family_length;
-
-  hb_byte_t* qual;
-  size_t qual_length;
-
-  hb_byte_t* value;
-  size_t value_length;
-
-  uint64_t timestamp;
-} hb_cell_t;
+#include <stdlib.h>
 
 typedef enum {
   DELETE_ONE_VERSION,
   DELETE_MULTIPLE_VERSIONS,
   DELETE_FAMILY,
   DELETE_FAMILY_VERSION
-} hb_delete_type;
+} delete_type;
 
 typedef enum {
   USE_DEFAULT,
@@ -61,23 +35,26 @@ typedef enum {
   ASYNC_WAL,
   SYNC_WAL,
   HSYNC_WAL
-} hb_durability_type;
+} durability_type;
 
-typedef void* hb_admin_t;
-typedef void* hb_client_t;
-typedef void* hb_connection_attr_t;
-typedef void* hb_connection_t;
-typedef void* hb_get_t;
-typedef void* hb_mutation_t;
-typedef void* hb_put_t;
-typedef void* hb_delete_t;
-typedef void* hb_increment_t;
-typedef void* hb_append_t;
-typedef void* hb_result_t;
-typedef void* hb_scanner_t;
+class Mutation {
+  char *name_space;
+  size_t name_space_length;
 
-#ifdef __cplusplus
-}  // extern "C"
-#endif  // __cplusplus
+  char *table;
+  size_t table_length;
 
-#endif  // CORE_HBASE_TYPES_H_
+  unsigned char *row;
+  size_t row_length;
+
+  durability_type durability;
+
+public:
+  void set_namespace(char *name_space, size_t name_space_length);
+  void set_table(char *table, size_t table_length);
+  void set_row(unsigned char *row, size_t row_length);
+  void set_durability(durability_type durability);
+
+  virtual ~Mutation();
+};
+#endif // CORE_MUTATION_H_

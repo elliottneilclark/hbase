@@ -14,12 +14,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-#ifndef CORE_ADMIN_H_
-#define CORE_ADMIN_H_
+#include "core/put.h"
 
-class Admin {
-};
-#endif  // CORE_ADMIN_H_
+Put::~Put() {}

@@ -17,4 +17,13 @@
  *
  */
 
-#include "core/client.h"
+#ifndef CORE_DELETE_H_
+#define CORE_DELETE_H_
+
+#include "core/mutation.h"
+
+class Delete : public Mutation {
+public:
+  ~Delete();
+};
+#endif // CORE_DELETE_H_

@@ -14,13 +14,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-#ifndef CORE_CONNECTION_H_
-#define CORE_CONNECTION_H_
 
-class Connection {
-  char * zk_quorum;
- public:
-  void set_zk_quorum(char * zk_q);
+#ifndef CORE_PUT_H_
+#define CORE_PUT_H_
+
+#include "core/mutation.h"
+
+class Put : public Mutation {
+public:
+  ~Put();
 };
-#endif  // CORE_CONNECTION_H_
+#endif // CORE_PUT_H_

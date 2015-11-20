@@ -17,10 +17,11 @@
  *
  */
 
-#ifndef CORE_GET_H_
-#define CORE_GET_H_
+#ifndef CORE_CONNECTION_ATTR_H_
+#define CORE_CONNECTION_ATTR_H_
 
-class Get {
-};
+#include "core/hbase_macros.h"
 
-#endif  // CORE_GET_H_
+class ConnectionAttr {};
+
+#endif // CORE_CONNECTION_ATTR_H_

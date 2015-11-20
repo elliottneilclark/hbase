@@ -20,6 +20,5 @@
 #ifndef CORE_SCANNER_H_
 #define CORE_SCANNER_H_
 
-class Scanner {
-};
-#endif  // CORE_SCANNER_H_
+class Scanner {};
+#endif // CORE_SCANNER_H_

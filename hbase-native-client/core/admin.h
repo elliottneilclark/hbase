@@ -14,9 +14,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-#include "core/connection.h"
 
-void Connection::set_zk_quorum(char * zk_q) {
-  this->zk_quorum = zk_q;
-}
+#ifndef CORE_ADMIN_H_
+#define CORE_ADMIN_H_
+class Admin {};
+#endif // CORE_ADMIN_H_

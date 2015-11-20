@@ -14,16 +14,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
-#ifndef CORE_DELETE_H_
-#define CORE_DELETE_H_
+#include "core/delete.h"
 
-#include "core/mutation.h"
-
-class Delete: public Mutation {
- public:
-  ~Delete();
-};
-#endif  // CORE_DELETE_H_
+Delete::~Delete() {}
