@@ -28,5 +28,4 @@ if [[ ! -d third-party/googletest ]]; then
         git clone https://github.com/google/googletest.git third-party/googletest
 fi
 
-
 docker run -v ${PWD}/..:/usr/local/src/hbase -it hbase_native  /bin/bash
