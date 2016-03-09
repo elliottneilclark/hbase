@@ -62,7 +62,7 @@ tp_dep_rules = add_system_libs(system_libs) \
 
 folly = add_system_libs(['folly'],
                         lib_dir='/usr/local/lib',
-                        exported_deps=tp_dep_rules,
+                        deps=tp_dep_rules,
                         exported_linker_flags=["-pthread",
                                                "-lstdc++", ])
 folly_bench = add_system_libs(['follybenchmark'],
@@ -72,7 +72,7 @@ folly_bench = add_system_libs(['follybenchmark'],
                                                      "-lstdc++", ])
 wangle = add_system_libs(['wangle'],
                          lib_dir='/usr/local/lib',
-                         exported_deps=tp_dep_rules + folly,
+                         deps=tp_dep_rules + folly,
                          exported_linker_flags=["-pthread",
                                                 "-lstdc++", ])
 cxx_library(

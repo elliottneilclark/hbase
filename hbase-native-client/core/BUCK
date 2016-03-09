@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cxx_library(name="core",
+cxx_binary(name="core",
             headers=[
                 "admin.h",
                 "client.h",
@@ -47,7 +47,9 @@ cxx_library(name="core",
             ],
             visibility=[
                 'PUBLIC',
-            ], )
+            ], 
+            link_style="static",
+            )
 
 cxx_test(name="simple-test",
          headers=[
