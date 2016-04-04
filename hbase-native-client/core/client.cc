@@ -24,19 +24,17 @@
 #include <glog/logging.h>
 #include <gflags/gflags.h>
 
+#include <wangle/concurrent/GlobalExecutor.h>
+
 #include "if/ZooKeeper.pb.h"
+#include "core/connection-factory.h"
 
 using namespace folly;
+using namespace std;
 using namespace hbase::pb;
 
-int main(int argc, char *argv[]) {
-  MetaRegionServer mrs;
-  google::ParseCommandLineFlags(&argc, &argv, true);
-  google::InitGoogleLogging(argv[0]);
+namespace hbase {
 
-  FB_LOG_EVERY_MS(INFO, 10000) << "Hello";
-  for (long i = 0; i < 10000000; i++) {
-    FB_LOG_EVERY_MS(INFO, 1) << Random::rand32();
-  }
-  return 0;
+Client::Client(string quorum_spec)
+    : location_cache(quorum_spec, wangle::getCPUExecutor()) {}
 }

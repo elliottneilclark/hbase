@@ -16,30 +16,19 @@
  * limitations under the License.
  *
  */
+#pragma once
 
-#include <gtest/gtest.h>
+#include <wangle/channel/Handler.h>
 
-namespace {
+namespace hbase {
 
-class NativeClientTestEnv : public ::testing::Environment {
+class HeaderHandler : public wangle::OutboundBytesToBytesHandler {
 public:
-  void SetUp() override {
-    // start local HBase cluster to be reused by all tests
-    auto result = system("bin/start_local_hbase_and_wait.sh");
-    ASSERT_EQ(0, result);
-  }
+  folly::Future<folly::Unit> write(Context *ctx,
+                                   std::unique_ptr<folly::IOBuf> msg) override;
 
-  void TearDown() override {
-    // shutdown local HBase cluster
-    auto result = system("bin/stop_local_hbase_and_wait.sh");
-    ASSERT_EQ(0, result);
-  }
+private:
+  folly::Future<folly::Unit> write_header(Context *ctx);
+  bool need_send_header_{true};
 };
-
-} // anonymous
-
-int main(int argc, char **argv) {
-  testing::InitGoogleTest(&argc, argv);
-  ::testing::AddGlobalTestEnvironment(new NativeClientTestEnv());
-  return RUN_ALL_TESTS();
-}
+} // hbase

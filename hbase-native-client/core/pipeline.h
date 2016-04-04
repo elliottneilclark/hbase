@@ -16,30 +16,17 @@
  * limitations under the License.
  *
  */
+#pragma once
 
-#include <gtest/gtest.h>
+#include <wangle/service/Service.h>
+#include "request.h"
 
-namespace {
+namespace hbase {
+using ClientPipeline = wangle::Pipeline<folly::IOBufQueue &, Request>;
 
-class NativeClientTestEnv : public ::testing::Environment {
+class RpcPipelineFactory : public wangle::PipelineFactory<ClientPipeline> {
 public:
-  void SetUp() override {
-    // start local HBase cluster to be reused by all tests
-    auto result = system("bin/start_local_hbase_and_wait.sh");
-    ASSERT_EQ(0, result);
-  }
-
-  void TearDown() override {
-    // shutdown local HBase cluster
-    auto result = system("bin/stop_local_hbase_and_wait.sh");
-    ASSERT_EQ(0, result);
-  }
+  ClientPipeline::Ptr
+  newPipeline(std::shared_ptr<folly::AsyncTransportWrapper> sock) override;
 };
-
-} // anonymous
-
-int main(int argc, char **argv) {
-  testing::InitGoogleTest(&argc, argv);
-  ::testing::AddGlobalTestEnvironment(new NativeClientTestEnv());
-  return RUN_ALL_TESTS();
-}
+} // hbase

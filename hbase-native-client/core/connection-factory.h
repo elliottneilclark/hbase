@@ -16,30 +16,24 @@
  * limitations under the License.
  *
  */
+#pragma once
 
-#include <gtest/gtest.h>
+#include <wangle/bootstrap/ClientBootstrap.h>
+#include <wangle/service/Service.h>
 
-namespace {
+#include "service.h"
+#include "pipeline.h"
+#include "request.h"
+#include "response.h"
+#include "client-dispatcher.h"
 
-class NativeClientTestEnv : public ::testing::Environment {
+namespace hbase {
+class ConnectionFactory {
 public:
-  void SetUp() override {
-    // start local HBase cluster to be reused by all tests
-    auto result = system("bin/start_local_hbase_and_wait.sh");
-    ASSERT_EQ(0, result);
-  }
+  ConnectionFactory();
+  folly::Future<ClientDispatcher> make_connection(std::string host, int port);
 
-  void TearDown() override {
-    // shutdown local HBase cluster
-    auto result = system("bin/stop_local_hbase_and_wait.sh");
-    ASSERT_EQ(0, result);
-  }
+private:
+  wangle::ClientBootstrap<ClientPipeline> bootstrap_;
 };
-
-} // anonymous
-
-int main(int argc, char **argv) {
-  testing::InitGoogleTest(&argc, argv);
-  ::testing::AddGlobalTestEnvironment(new NativeClientTestEnv());
-  return RUN_ALL_TESTS();
-}
+} // hbase

@@ -16,30 +16,20 @@
  * limitations under the License.
  *
  */
+#pragma once
 
-#include <gtest/gtest.h>
+#include <wangle/codec/ByteToMessageDecoder.h>
 
-namespace {
+#include "response.h"
 
-class NativeClientTestEnv : public ::testing::Environment {
+namespace hbase {
+
+class ResponseDecoder : public wangle::ByteToMessageDecoder<Response> {
 public:
-  void SetUp() override {
-    // start local HBase cluster to be reused by all tests
-    auto result = system("bin/start_local_hbase_and_wait.sh");
-    ASSERT_EQ(0, result);
-  }
-
-  void TearDown() override {
-    // shutdown local HBase cluster
-    auto result = system("bin/stop_local_hbase_and_wait.sh");
-    ASSERT_EQ(0, result);
+  bool decode(Context *ctx, folly::IOBufQueue &buf, Response &result,
+              size_t &size) {
+    printf("Decoding size = %zu", size);
+    return false;
   }
 };
-
-} // anonymous
-
-int main(int argc, char **argv) {
-  testing::InitGoogleTest(&argc, argv);
-  ::testing::AddGlobalTestEnvironment(new NativeClientTestEnv());
-  return RUN_ALL_TESTS();
 }

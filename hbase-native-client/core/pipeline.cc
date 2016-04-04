@@ -16,30 +16,30 @@
  * limitations under the License.
  *
  */
+#include "pipeline.h"
 
-#include <gtest/gtest.h>
+#include <wangle/channel/EventBaseHandler.h>
+#include <wangle/channel/OutputBufferingHandler.h>
 
-namespace {
+#include "header-handler.h"
+#include "request-encoder.h"
+#include "response-decoder.h"
 
-class NativeClientTestEnv : public ::testing::Environment {
-public:
-  void SetUp() override {
-    // start local HBase cluster to be reused by all tests
-    auto result = system("bin/start_local_hbase_and_wait.sh");
-    ASSERT_EQ(0, result);
-  }
+using namespace folly;
+using namespace hbase;
+using namespace wangle;
 
-  void TearDown() override {
-    // shutdown local HBase cluster
-    auto result = system("bin/stop_local_hbase_and_wait.sh");
-    ASSERT_EQ(0, result);
-  }
-};
+ClientPipeline::Ptr
+RpcPipelineFactory::newPipeline(std::shared_ptr<AsyncTransportWrapper> sock) {
+  auto pipeline = ClientPipeline::create();
+  pipeline->addBack(AsyncSocketHandler(sock));
+  pipeline->addBack(OutputBufferingHandler());
+  pipeline->addBack(EventBaseHandler());
 
-} // anonymous
+  pipeline->addBack(HeaderHandler());
+  pipeline->addBack(ResponseDecoder());
+  pipeline->addBack(RequestEncoder());
 
-int main(int argc, char **argv) {
-  testing::InitGoogleTest(&argc, argv);
-  ::testing::AddGlobalTestEnvironment(new NativeClientTestEnv());
-  return RUN_ALL_TESTS();
+  pipeline->finalize();
+  return std::move(pipeline);
 }

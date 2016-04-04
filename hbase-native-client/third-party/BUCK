@@ -32,7 +32,7 @@ def add_system_libs(names=[],
                              lib_name=name,
                              lib_dir='$(location :{})'.format(gen_rule_name),
                              deps=deps,
-			     force_static = True,
+                             force_static = True,
                              exported_deps=exported_deps,
                              visibility=['PUBLIC'],
                              exported_linker_flags=exported_linker_flags, )
@@ -57,7 +57,7 @@ local_libs = [
 
 
 
-tp_dep_rules = add_system_libs(system_libs) \
+tp_dep_rules = add_system_libs(system_libs, exported_linker_flags = [ "-latomic" ]) \
   + add_system_libs(local_libs, lib_dir = "/usr/local/lib")
 
 zookeeper = add_system_libs(["zookeeper_mt"], lib_dir =  "/usr/local/lib")
@@ -65,17 +65,26 @@ folly = add_system_libs(['folly'],
                         lib_dir='/usr/local/lib',
                         exported_deps=tp_dep_rules,
                         exported_linker_flags=["-pthread",
-                                               "-lstdc++", ])
+                                               "-lstdc++", 
+                                               "-lssl", 
+                                               "-lcrypto",
+                                               "-ldl"])
 folly_bench = add_system_libs(['follybenchmark'],
                               lib_dir='/usr/local/lib',
                               exported_deps=tp_dep_rules + folly,
                               exported_linker_flags=["-pthread",
-                                                     "-lstdc++", ])
+                                                     "-lstdc++", 
+                                                     "-lssl", 
+                                                     "-lcrypto",
+                                                     "-ldl"])
 wangle = add_system_libs(['wangle'],
                          lib_dir='/usr/local/lib',
                          exported_deps=tp_dep_rules + folly,
                          exported_linker_flags=["-pthread",
-                                                "-lstdc++", ])
+                                                "-lstdc++", 
+                                                "-lssl", 
+                                                "-lcrypto",
+                                                "-ldl"])
 
 
 genrule(

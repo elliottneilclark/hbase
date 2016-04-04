@@ -17,29 +17,40 @@
  *
  */
 
-#include <gtest/gtest.h>
 
-namespace {
+#include <folly/Logging.h>
+#include <folly/Random.h>
+#include <glog/logging.h>
+#include <gflags/gflags.h>
 
-class NativeClientTestEnv : public ::testing::Environment {
-public:
-  void SetUp() override {
-    // start local HBase cluster to be reused by all tests
-    auto result = system("bin/start_local_hbase_and_wait.sh");
-    ASSERT_EQ(0, result);
-  }
+#include <wangle/concurrent/GlobalExecutor.h>
 
-  void TearDown() override {
-    // shutdown local HBase cluster
-    auto result = system("bin/stop_local_hbase_and_wait.sh");
-    ASSERT_EQ(0, result);
-  }
-};
+#include "if/ZooKeeper.pb.h"
+#include "core/connection-factory.h"
+#include "core/client.h"
 
-} // anonymous
+using namespace folly;
+using namespace std;
+using namespace hbase::pb;
 
-int main(int argc, char **argv) {
-  testing::InitGoogleTest(&argc, argv);
-  ::testing::AddGlobalTestEnvironment(new NativeClientTestEnv());
-  return RUN_ALL_TESTS();
+int main(int argc, char *argv[]) {
+  google::ParseCommandLineFlags(&argc, &argv, true);
+  google::InitGoogleLogging(argv[0]);
+
+  // Show that we can create a client
+  //hbase::Client client{"localhost:2181"};
+
+  // Create a connection factory
+  hbase::ConnectionFactory cf;
+
+  // Create a connection to the local host
+  auto conn = cf.make_connection("localhost", 16010).get();
+
+  // Send the request
+  hbase::Request r;
+  conn(r).get();
+
+  conn.close();
+
+  return 0;
 }
