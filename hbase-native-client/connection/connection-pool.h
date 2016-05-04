@@ -37,7 +37,7 @@ struct ServerNameHash {
   std::size_t operator()(hbase::pb::ServerName const &s) const {
     std::size_t h1 = std::hash<std::string>()(s.host_name());
     std::size_t h2 = std::hash<uint32_t>()(s.port());
-    return h1 ^ (h2 << 1);
+    return h1 ^ (h2 << 2);
   }
 };
 
@@ -47,9 +47,9 @@ public:
   explicit ConnectionPool(std::shared_ptr<ConnectionFactory> cf);
   std::shared_ptr<HBaseService> get(const hbase::pb::ServerName &sn);
   void close(const hbase::pb::ServerName &sn);
+  std::shared_ptr<ConnectionFactory> cf_;
 
 private:
-  std::shared_ptr<ConnectionFactory> cf_;
   std::unordered_map<hbase::pb::ServerName, std::shared_ptr<HBaseService>,
                      ServerNameHash, ServerNameEquals>
       connections_;

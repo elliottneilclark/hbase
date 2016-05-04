@@ -75,3 +75,29 @@ TEST(TestConnectionPool, TestOnlyCreateOnce) {
   ASSERT_TRUE(result != nullptr);
   result = cp.get(sn);
 }
+TEST(TestConnectionPool, TestOnlyCreateMultipleDispose) {
+  std::string hostname_one{"hostname"};
+  std::string hostname_two{"hostname_two"};
+  uint32_t port{999};
+
+  auto mock_cf = std::make_shared<MockConnectionFactory>();
+  EXPECT_CALL((*mock_cf), make_connection(_, _))
+      .Times(2)
+      .WillRepeatedly(Return(std::make_shared<MockService>()));
+
+  LOG(ERROR) << "Created ConnectionPool";
+
+  ServerName sn_one;
+  sn_one.set_host_name(hostname_one);
+  sn_one.set_port(port);
+
+  ServerName sn_two;
+  sn_two.set_host_name(hostname_two);
+  sn_two.set_port(port);
+
+  {
+    ConnectionPool cp{mock_cf};
+    auto result_one = cp.get(sn_one);
+    auto result_two = cp.get(sn_two);
+  }
+}

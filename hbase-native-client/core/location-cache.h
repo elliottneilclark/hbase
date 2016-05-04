@@ -48,8 +48,8 @@ public:
   // Meta Related Methods.
   // These are only public until testing is complete
   folly::Future<hbase::pb::ServerName> LocateMeta();
-  folly::Future<std::shared_ptr<RegionLocation>> LocateFromMeta(const hbase::pb::TableName &tn,
-                                               const std::string &row);
+  folly::Future<std::shared_ptr<RegionLocation>>
+  LocateFromMeta(const hbase::pb::TableName &tn, const std::string &row);
   void InvalidateMeta();
 
 private:

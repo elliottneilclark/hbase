@@ -24,9 +24,7 @@
 #include <wangle/channel/AsyncSocketHandler.h>
 #include <wangle/channel/EventBaseHandler.h>
 #include <wangle/channel/OutputBufferingHandler.h>
-#include <wangle/service/ClientDispatcher.h>
-#include <wangle/service/CloseOnReleaseFilter.h>
-#include <wangle/service/ExpiringFilter.h>
+#include <wangle/concurrent/GlobalExecutor.h>
 
 #include <string>
 
@@ -41,7 +39,12 @@ using namespace hbase;
 using namespace wangle;
 
 ConnectionFactory::ConnectionFactory() : bootstrap_() {
-  bootstrap_.group(std::make_shared<wangle::IOThreadPoolExecutor>(1));
+  LOG(ERROR) << "Creating a ConnectionFactory";
+  auto pool = std::static_pointer_cast<wangle::IOThreadPoolExecutor>(
+      wangle::getIOExecutor());
+  LOG(ERROR) << "pool = " << pool.get();
+  LOG(ERROR) << "EventBase = " << pool->getEventBase();
+  bootstrap_.group(pool);
   bootstrap_.pipelineFactory(std::make_shared<RpcPipelineFactory>());
 }
 
@@ -52,7 +55,5 @@ ConnectionFactory::make_connection(const std::string &host, int port) {
   auto pipeline = bootstrap_.connect(SocketAddress(host, port, true)).get();
   auto dispatcher = std::make_shared<ClientDispatcher>();
   dispatcher->setPipeline(pipeline);
-  auto service = std::make_shared<
-      CloseOnReleaseFilter<std::unique_ptr<Request>, Response>>(dispatcher);
-  return service;
+  return dispatcher;
 }

@@ -36,16 +36,21 @@ ConnectionPool::ConnectionPool(std::shared_ptr<ConnectionFactory> cf)
     : cf_(cf), connections_(), map_mutex_() {}
 
 std::shared_ptr<HBaseService> ConnectionPool::get(const ServerName &sn) {
+  // Create a read lock.
   SharedMutexWritePriority::UpgradeHolder holder(map_mutex_);
+
   auto found = connections_.find(sn);
   if (found == connections_.end() || found->second == nullptr) {
+    // Move the upgradable lock into the write lock if the connection
+    // hasn't been found.
     SharedMutexWritePriority::WriteHolder holder(std::move(holder));
     auto new_con = cf_->make_connection(sn.host_name(), sn.port());
-    connections_[sn] = new_con;
+    connections_.insert(std::make_pair(sn, new_con));
     return new_con;
   }
   return found->second;
 }
+
 void ConnectionPool::close(const ServerName &sn) {
   SharedMutexWritePriority::WriteHolder holder(map_mutex_);
 
